@@ -1,17 +1,31 @@
-import Head from 'next/head'
 import styles from '../styles/Layout.module.css'
+import ArticleList from '../components/ArticleList';
+import {server} from '../config';
 
-const Home = () =>{
+const Home = ({articles}) =>{
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Next &amp; React Crash Course</title>
-        <meta name="description" content="Learn about Nextjs, Web dev, Programming" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <p>Welcome to Next/React Home</p>
+      <ArticleList articles={articles}/>
     </div>
   )
 }
 
-export default Home;
+
+export const getStaticProps = async () =>{
+  const res = await fetch(`${server}/api/articles`);
+  const articles = await res.json();
+  return {
+    props: { articles}
+  }
+}
+
+
+// export const getStaticProps = async () =>{
+//     const res = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=6');
+//     const articles = await res.json();
+//     return {
+//         props: { articles}
+//       }
+// }
+
+  export default Home;
